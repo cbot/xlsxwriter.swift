@@ -209,7 +209,7 @@ public struct Worksheet {
     totalRow: [TotalFunction] = []
   ) -> Worksheet {
     var options = lxw_table_options()
-    if let name = name { options.name = makeCString(from: name) }
+    if let name = name { options.name = UnsafePointer(makeCString(from: name)) }
     options.style_type = UInt8(LXW_TABLE_STYLE_TYPE_MEDIUM.rawValue)
     options.style_type_number = 7
     options.total_row = totalRow.isEmpty ? UInt8(LXW_FALSE.rawValue) : UInt8(LXW_TRUE.rawValue)
@@ -220,7 +220,7 @@ public struct Worksheet {
     if !header.isEmpty {
       table_columns = Array(repeating: lxw_table_column(), count: header.count)
       for i in header.indices {
-        table_columns[i].header = makeCString(from: header[i])
+        table_columns[i].header = UnsafePointer(makeCString(from: header[i]))
         if format.endIndex > i {
           table_columns[i].header_format = format[i]?.lxw_format
         }
